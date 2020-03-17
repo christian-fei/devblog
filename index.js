@@ -41,6 +41,19 @@ class MarkdownFile {
     }
     const html = convertMdToHTML(md, this.absoluteBasedir + '/_includes')
 
+    function convertMdToHTML (mdContent, includesDir = '_includes') {
+      const htmlContent = mdToHTML(mdContent)
+      const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(includesDir))
+      // const env = nunjucks.configure(includesDir)
+
+      const renderedContent = nunjucks
+        .compile(htmlContent, env)
+        .render({ author: 'test author' })
+
+      logger.debug({ includesDir, htmlContent, mdContent, renderedContent })
+      return renderedContent
+    }
+
     return { md, html, attributes }
   }
 
@@ -90,17 +103,4 @@ function mkdir (pathToDir) {
   try {
     fs.mkdirSync(pathToDir, { recursive: true })
   } catch (err) { logger.error('failed to create _site', pathToDir, err.message, err); return err }
-}
-
-function convertMdToHTML (mdContent, includesDir = '_includes') {
-  const htmlContent = mdToHTML(mdContent)
-  const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(includesDir))
-  // const env = nunjucks.configure(includesDir)
-
-  const renderedContent = nunjucks
-    .compile(htmlContent, env)
-    .render({ author: 'test author' })
-
-  logger.debug({ includesDir, htmlContent, mdContent, renderedContent })
-  return renderedContent
 }
