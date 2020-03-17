@@ -38,6 +38,7 @@ async function build (absoluteBasedir, files = []) {
     } catch (err) {
       errors.push({ err, message: err.message, filepath })
       logger.error(`failed writing file ${filepath}`, err.message)
+      console.error(err)
     }
   }
 

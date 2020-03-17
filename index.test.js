@@ -1,5 +1,6 @@
 const { serial: test } = require('ava')
 const { scan, build } = require('.')
+const fs = require('fs')
 
 const basedir = './test-site'
 
@@ -29,4 +30,7 @@ test('converts markdown files to html files', async t => {
   t.is(written.length, 1)
   const htmlFilePath = written[0]
   t.true(htmlFilePath.endsWith('/_site/index.html'))
+
+  const htmlContent = fs.readFileSync(htmlFilePath, { encoding: 'utf8' })
+  t.snapshot(htmlContent)
 })
