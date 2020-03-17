@@ -1,9 +1,10 @@
-const fs = require('fs')
 // const fsp = require('fs').promises
 const path = require('path')
 const glob = require('glob')
-const MarkdownFile = require('./lib/markdown-file')
 const logger = require('pino')()
+
+const MarkdownFile = require('./lib/markdown-file')
+const mkdir = require('./lib/mkdir')
 
 module.exports = {
   scan,
@@ -44,10 +45,4 @@ async function build (absoluteBasedir, files = []) {
     errors,
     written
   }
-}
-
-function mkdir (pathToDir) {
-  try {
-    fs.mkdirSync(pathToDir, { recursive: true })
-  } catch (err) { logger.error('failed to create _site', pathToDir, err.message, err); return err }
 }
