@@ -20,9 +20,13 @@ async function scan (basedir = process.cwd()) {
   return { absoluteBasedir, mdFiles }
 }
 
-async function build (files = []) {
+async function build (absoluteBasedir, files = []) {
   const errors = []
   const written = []
+
+  const _sitePath = absoluteBasedir + '/_site'
+
+  mkdir(_sitePath)
 
   for (const file of files) {
     try {
@@ -32,7 +36,15 @@ async function build (files = []) {
 
       logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
 
-      const htmlFilePath = path.resolve(file.replace(/\.md$/, '.html'))
+      const htmlFilePath = path.resolve(file
+        .replace(absoluteBasedir, _sitePath)
+        .replace(/\.md$/, '.html')
+      )
+      const htmlDirPath = path.resolve(htmlFilePath, '..')
+
+      logger.info('creating htmlDirPath', htmlDirPath)
+      mkdir(htmlDirPath)
+
       fs.writeFileSync(htmlFilePath, htmlContent, { encoding: 'utf8' })
 
       written.push(htmlFilePath)
@@ -46,6 +58,12 @@ async function build (files = []) {
     errors,
     written
   }
+}
+
+function mkdir (pathToDir) {
+  try {
+    fs.mkdirSync(pathToDir, { recursive: true })
+  } catch (err) { logger.error('failed to create _site', pathToDir, err.message, err); return err }
 }
 
 function convertMdToHTML (mdContent) {
