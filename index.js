@@ -38,7 +38,8 @@ async function build (absoluteBasedir, files = []) {
       if (bodyBegin > 0) {
         mdContent = mdContent.split('\n').filter((_, i) => i >= bodyBegin - 2).join('\n')
       }
-      const htmlContent = convertMdToHTML(mdContent)
+      const htmlContent = convertMdToHTML(mdContent, absoluteBasedir + '/_includes')
+      console.log({ htmlContent })
 
       logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
 
@@ -72,8 +73,17 @@ function mkdir (pathToDir) {
   } catch (err) { logger.error('failed to create _site', pathToDir, err.message, err); return err }
 }
 
-function convertMdToHTML (mdContent) {
-  let htmlContent = mdToHTML(mdContent)
-  htmlContent = nunjucks.renderString(htmlContent, { author: 'test author' })
-  return htmlContent
+function convertMdToHTML (mdContent, includesDir = '_includes') {
+  const htmlContent = mdToHTML(mdContent)
+  const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(includesDir))
+
+  console.log(env)
+
+  const renderedContent = nunjucks
+    .compile(htmlContent, env)
+    .render({ author: 'test author', content: mdContent })
+
+  console.log({ includesDir, htmlContent, mdContent, renderedContent })
+
+  return renderedContent
 }
