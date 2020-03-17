@@ -26,41 +26,34 @@ class MarkdownFile {
     this.filepath = filepath
     this.absoluteBasedir = absoluteBasedir
     this._sitePath = absoluteBasedir + '/_site'
+    this.htmlPath = path.resolve(this.filepath
+      .replace(this.absoluteBasedir, this._sitePath)
+      .replace(/\.md$/, '.html')
+    )
+    this.dirPath = path.resolve(this.htmlPath, '..')
   }
 
   read () {
-    return fs.readFileSync(this.filepath, { encoding: 'utf8' })
+    let md = fs.readFileSync(this.filepath, { encoding: 'utf8' })
+    const { attributes, bodyBegin } = parseFrontMatter(md)
+    if (bodyBegin > 0) {
+      md = md.split('\n').filter((_, i) => i >= bodyBegin - 2).join('\n')
+    }
+    const html = convertMdToHTML(md, this.absoluteBasedir + '/_includes')
+
+    return { md, html, attributes }
   }
 
-  render () {
-    const file = this.filepath
-    const absoluteBasedir = this.absoluteBasedir
-    const _sitePath = this._sitePath
-    let mdContent = this.read()
-    const { attributes, bodyBegin } = parseFrontMatter(mdContent)
+  write () {
+    const { md, html, attributes } = this.read()
+    logger.debug('md, html', `\n\n${md}\n\n${html}`)
+    logger.debug('attributes', attributes)
 
-    if (bodyBegin > 0) {
-      mdContent = mdContent.split('\n').filter((_, i) => i >= bodyBegin - 2).join('\n')
-    }
-    const htmlContent = convertMdToHTML(mdContent, absoluteBasedir + '/_includes')
-    logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
+    mkdir(this.dirPath)
+    fs.writeFileSync(this.htmlPath, html, { encoding: 'utf8' })
+    logger.info(`written`, html.length, this.htmlPath)
 
-    const htmlFilePath = path.resolve(file
-      .replace(absoluteBasedir, _sitePath)
-      .replace(/\.md$/, '.html')
-    )
-    const htmlDirPath = path.resolve(htmlFilePath, '..')
-
-    logger.debug('creating htmlDirPath', htmlDirPath)
-    mkdir(htmlDirPath)
-
-    fs.writeFileSync(htmlFilePath, htmlContent, { encoding: 'utf8' })
-
-    logger.info(`written`, htmlContent.length, htmlFilePath)
-
-    return {
-      htmlFilePath, htmlContent, mdContent, attributes
-    }
+    return this.htmlPath
   }
 }
 
@@ -77,7 +70,7 @@ async function build (absoluteBasedir, files = []) {
       if (filepath.endsWith('.md')) {
         const file = new MarkdownFile(filepath, absoluteBasedir)
         logger.debug('writing file', file)
-        written.push(file.render())
+        written.push(file.write())
         continue
       }
       logger.debug(`unhandled ${filepath}`)
@@ -102,10 +95,11 @@ function mkdir (pathToDir) {
 function convertMdToHTML (mdContent, includesDir = '_includes') {
   const htmlContent = mdToHTML(mdContent)
   const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(includesDir))
+  // const env = nunjucks.configure(includesDir)
 
   const renderedContent = nunjucks
     .compile(htmlContent, env)
-    .render({ author: 'test author', content: mdContent })
+    .render({ author: 'test author' })
 
   logger.debug({ includesDir, htmlContent, mdContent, renderedContent })
   return renderedContent
