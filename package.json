@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "glob": "^7.1.6",
+    "nunjucks": "^3.2.1",
     "pino": "^5.17.0",
     "remarkable": "^2.0.0"
   }

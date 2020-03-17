@@ -2,9 +2,10 @@ const fs = require('fs')
 // const fsp = require('fs').promises
 const path = require('path')
 const glob = require('glob')
+const nunjucks = require('nunjucks')
 const { Remarkable } = require('remarkable')
 const md = new Remarkable()
-const render = md.render.bind(md)
+const mdToHTML = md.render.bind(md)
 const logger = require('pino')()
 
 module.exports = {
@@ -21,17 +22,20 @@ async function scan (basedir = process.cwd()) {
 
 async function build (files = []) {
   const errors = []
-  const succeeded = []
+  const written = []
 
   for (const file of files) {
     try {
       logger.debug('writing file', file)
-      const md = fs.readFileSync(file, { encoding: 'utf8' })
-      const html = render(md)
-      logger.debug('md, html', `\n\n${md}\n\n${html}`)
+      const mdContent = fs.readFileSync(file, { encoding: 'utf8' })
+      const htmlContent = convertMdToHTML(mdContent)
+
+      logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
+
       const htmlFilePath = path.resolve(file.replace(/\.md$/, '.html'))
-      fs.writeFileSync(htmlFilePath, html, { encoding: 'utf8' })
-      succeeded.push(htmlFilePath)
+      fs.writeFileSync(htmlFilePath, htmlContent, { encoding: 'utf8' })
+
+      written.push(htmlFilePath)
     } catch (err) {
       errors.push({ err, message: err.message, file })
       logger.error(`failed writing file ${file}`, err.message)
@@ -40,6 +44,12 @@ async function build (files = []) {
 
   return {
     errors,
-    succeeded
+    written
   }
+}
+
+function convertMdToHTML (mdContent) {
+  let htmlContent = mdToHTML(mdContent)
+  htmlContent = nunjucks.renderString(htmlContent, { author: 'test author' })
+  return htmlContent
 }
