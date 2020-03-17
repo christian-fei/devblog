@@ -16,9 +16,9 @@ module.exports = {
 
 async function scan (basedir = process.cwd()) {
   const absoluteBasedir = path.resolve(basedir)
-  const mdFiles = glob.sync(absoluteBasedir + '/**/*.md')
+  const files = glob.sync(absoluteBasedir + '/**/*.md')
 
-  return { absoluteBasedir, mdFiles }
+  return { absoluteBasedir, files }
 }
 
 class MarkdownFile {
@@ -74,7 +74,7 @@ async function build (absoluteBasedir, files = []) {
 
   for (const filepath of files) {
     try {
-      if (filepath.endsWith('.md')) {
+      if (filepath.endsWith('.md')) {
         const file = new MarkdownFile(filepath, absoluteBasedir)
         logger.debug('writing file', file)
         written.push(file.render())

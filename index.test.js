@@ -10,17 +10,17 @@ test('resolves absolute basedir', async t => {
   t.truthy(absoluteBasedir.includes(process.cwd()))
 })
 
-test('finds mdFiles', async t => {
-  const { mdFiles } = await scan(basedir)
+test('finds files', async t => {
+  const { files } = await scan(basedir)
 
-  t.true(Array.isArray(mdFiles))
-  t.is(mdFiles.length, 1)
-  t.true(mdFiles[0].endsWith('/index.md'))
+  t.true(Array.isArray(files))
+  t.is(files.length, 1)
+  t.true(files[0].endsWith('/index.md'))
 })
 
-test('converts md files to html files', async t => {
-  const { absoluteBasedir, mdFiles } = await scan(basedir)
-  const { errors, written } = await build(absoluteBasedir, mdFiles)
+test('converts markdown files to html files', async t => {
+  const { absoluteBasedir, files } = await scan(basedir)
+  const { errors, written } = await build(absoluteBasedir, files)
 
   t.true(Array.isArray(errors))
   t.is(errors.length, 0)
