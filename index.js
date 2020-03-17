@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const nunjucks = require('nunjucks')
+const parseFrontMatter = require('front-matter')
 const { Remarkable } = require('remarkable')
 const md = new Remarkable()
 const mdToHTML = md.render.bind(md)
@@ -31,7 +32,12 @@ async function build (absoluteBasedir, files = []) {
   for (const file of files) {
     try {
       logger.debug('writing file', file)
-      const mdContent = fs.readFileSync(file, { encoding: 'utf8' })
+      let mdContent = fs.readFileSync(file, { encoding: 'utf8' })
+      const { attributes, bodyBegin } = parseFrontMatter(mdContent)
+
+      if (bodyBegin > 0) {
+        mdContent = mdContent.split('\n').filter((_, i) => i >= bodyBegin - 2).join('\n')
+      }
       const htmlContent = convertMdToHTML(mdContent)
 
       logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
@@ -47,7 +53,7 @@ async function build (absoluteBasedir, files = []) {
 
       fs.writeFileSync(htmlFilePath, htmlContent, { encoding: 'utf8' })
 
-      written.push(htmlFilePath)
+      written.push({ htmlFilePath, htmlContent, mdContent, attributes })
     } catch (err) {
       errors.push({ err, message: err.message, file })
       logger.error(`failed writing file ${file}`, err.message)

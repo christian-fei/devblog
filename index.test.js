@@ -27,5 +27,19 @@ test('converts md files to html files', async t => {
 
   t.true(Array.isArray(written))
   t.is(written.length, 1)
-  t.true(written[0].endsWith('/_site/index.html'))
+  const { htmlFilePath, htmlContent, mdContent, attributes } = written[0]
+  t.true(htmlFilePath.endsWith('/_site/index.html'))
+  t.deepEqual(htmlContent, `<h1>test title</h1>
+<p>test content</p>
+<p>~ by test author</p>
+`)
+
+  t.deepEqual(mdContent, `
+# test title
+
+test content
+
+~ by {{ author }}`)
+  t.deepEqual(attributes.title, 'A blog post title')
+  t.true(+new Date(attributes.date) > 0)
 })
