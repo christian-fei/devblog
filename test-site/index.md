@@ -7,5 +7,3 @@ layout: post.njk
 # test title
 
 test content
-
-~ by {{ author }}
