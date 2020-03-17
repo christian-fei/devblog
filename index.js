@@ -21,6 +21,49 @@ async function scan (basedir = process.cwd()) {
   return { absoluteBasedir, mdFiles }
 }
 
+class File {
+  constructor (filepath, absoluteBasedir) {
+    this.filepath = filepath
+    this.absoluteBasedir = absoluteBasedir
+    this._sitePath = absoluteBasedir + '/_site'
+  }
+
+  read () {
+    return fs.readFileSync(this.filepath, { encoding: 'utf8' })
+  }
+
+  render () {
+    const file = this.filepath
+    const absoluteBasedir = this.absoluteBasedir
+    const _sitePath = this._sitePath
+    let mdContent = this.read()
+    const { attributes, bodyBegin } = parseFrontMatter(mdContent)
+
+    if (bodyBegin > 0) {
+      mdContent = mdContent.split('\n').filter((_, i) => i >= bodyBegin - 2).join('\n')
+    }
+    const htmlContent = convertMdToHTML(mdContent, absoluteBasedir + '/_includes')
+    logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
+
+    const htmlFilePath = path.resolve(file
+      .replace(absoluteBasedir, _sitePath)
+      .replace(/\.md$/, '.html')
+    )
+    const htmlDirPath = path.resolve(htmlFilePath, '..')
+
+    logger.debug('creating htmlDirPath', htmlDirPath)
+    mkdir(htmlDirPath)
+
+    fs.writeFileSync(htmlFilePath, htmlContent, { encoding: 'utf8' })
+
+    logger.info(`written`, htmlContent.length, htmlFilePath)
+
+    return {
+      htmlFilePath, htmlContent, mdContent, attributes
+    }
+  }
+}
+
 async function build (absoluteBasedir, files = []) {
   const errors = []
   const written = []
@@ -29,35 +72,14 @@ async function build (absoluteBasedir, files = []) {
 
   mkdir(_sitePath)
 
-  for (const file of files) {
+  for (const filepath of files) {
     try {
+      const file = new File(filepath, absoluteBasedir)
       logger.debug('writing file', file)
-      let mdContent = fs.readFileSync(file, { encoding: 'utf8' })
-      const { attributes, bodyBegin } = parseFrontMatter(mdContent)
-
-      if (bodyBegin > 0) {
-        mdContent = mdContent.split('\n').filter((_, i) => i >= bodyBegin - 2).join('\n')
-      }
-      const htmlContent = convertMdToHTML(mdContent, absoluteBasedir + '/_includes')
-      console.log({ htmlContent })
-
-      logger.debug('mdContent, htmlContent', `\n\n${mdContent}\n\n${htmlContent}`)
-
-      const htmlFilePath = path.resolve(file
-        .replace(absoluteBasedir, _sitePath)
-        .replace(/\.md$/, '.html')
-      )
-      const htmlDirPath = path.resolve(htmlFilePath, '..')
-
-      logger.info('creating htmlDirPath', htmlDirPath)
-      mkdir(htmlDirPath)
-
-      fs.writeFileSync(htmlFilePath, htmlContent, { encoding: 'utf8' })
-
-      written.push({ htmlFilePath, htmlContent, mdContent, attributes })
+      written.push(file.render())
     } catch (err) {
-      errors.push({ err, message: err.message, file })
-      logger.error(`failed writing file ${file}`, err.message)
+      errors.push({ err, message: err.message, filepath })
+      logger.error(`failed writing file ${filepath}`, err.message)
     }
   }
 
@@ -77,13 +99,10 @@ function convertMdToHTML (mdContent, includesDir = '_includes') {
   const htmlContent = mdToHTML(mdContent)
   const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(includesDir))
 
-  console.log(env)
-
   const renderedContent = nunjucks
     .compile(htmlContent, env)
     .render({ author: 'test author', content: mdContent })
 
-  console.log({ includesDir, htmlContent, mdContent, renderedContent })
-
+  logger.debug({ includesDir, htmlContent, mdContent, renderedContent })
   return renderedContent
 }
