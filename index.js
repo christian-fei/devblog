@@ -32,6 +32,7 @@ async function scan (basedir = process.cwd()) {
       .map(i => `${absoluteBasedir}/${i}`)
   })
     .filter(f => !f.includes('_site'))
+    .filter(f => !f.includes('node_modules'))
 
   return { absoluteBasedir, files, basedir }
 }
