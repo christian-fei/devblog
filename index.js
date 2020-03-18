@@ -1,7 +1,7 @@
 // const fsp = require('fs').promises
 const path = require('path')
 const glob = require('glob')
-const logger = require('pino')()
+const logger = require('./lib/logger')
 
 const MarkdownFile = require('./lib/markdown-file')
 const mkdir = require('./lib/mkdir')
