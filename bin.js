@@ -17,13 +17,14 @@ async function run (pathParam) {
   console.log(`processing files..`)
 
   const { errors, results } = await build(absoluteBasedir, files)
-  if (errors.length > 0) {
-    console.error(`errors: `)
-    console.error(errors.map(e => `🚫 ${e.filepath}\n${e.message}`).join('\n'))
-  }
   if (results.length === 0) {
     console.info('⚠️ no files created')
   } else {
     console.log(results.map(w => `${w.relativeSource} -> ${w.relativeDestination}`).join('\n'))
+  }
+
+  if (errors.length > 0) {
+    console.error(`errors: `)
+    console.error(errors.map(e => `🚫 ${e.filepath}\n${e.message}`).join('\n'))
   }
 }
