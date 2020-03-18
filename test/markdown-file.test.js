@@ -7,7 +7,7 @@ test('reads file information', async t => {
   const absoluteBasedir = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(filepath, absoluteBasedir)
   t.truthy(file)
-  const result = file.read()
+  const result = await file.read()
   t.deepEqual(result.attributes, {})
   t.snapshot(result.html)
   t.snapshot(result.md)
@@ -18,6 +18,6 @@ test('write output file', async t => {
   const absoluteBasedir = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(filepath, absoluteBasedir)
 
-  const result = file.write()
+  const result = await file.write()
   t.truthy(result.includes('/test/fixtures/_site/test.html'), result)
 })

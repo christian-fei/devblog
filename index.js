@@ -36,7 +36,7 @@ async function scan (basedir = process.cwd()) {
   return { absoluteBasedir, files, basedir }
 }
 
-async function build (absoluteBasedir, files = []) {
+async function build (absoluteBasedir, files = [], config = {}) {
   const errors = []
   const results = []
 
@@ -47,9 +47,9 @@ async function build (absoluteBasedir, files = []) {
   for (const filepath of files) {
     try {
       if (filepath.endsWith('.md')) {
-        const file = new MarkdownFile(filepath, absoluteBasedir)
+        const file = new MarkdownFile(filepath, absoluteBasedir, config)
         logger.debug('writing file', file)
-        const destination = file.write()
+        const destination = await file.write()
         results.push({
           destination,
           source: filepath,
@@ -68,8 +68,6 @@ async function build (absoluteBasedir, files = []) {
         relativeSource: filepath.replace(absoluteBasedir + '/', '')
       })
       continue
-
-      console.error(`unhandled ${filepath}`)
     } catch (err) {
       errors.push({ err, message: err.message, filepath })
       logger.trace(`failed writing file ${filepath}`, err.message, err)
