@@ -13,7 +13,20 @@ module.exports = {
 
 async function scan (basedir = process.cwd()) {
   const absoluteBasedir = path.resolve(basedir)
-  const files = glob.sync(absoluteBasedir + '/**/*.md')
+  const files = glob.sync(absoluteBasedir + '/**/*', {
+    ignore: [
+      'node_modules',
+      'node_modules*',
+      '.cache',
+      'package.json',
+      '.gitignore',
+      '_includes',
+      '_includes/*',
+      '_site',
+      '_site/*'
+    ]
+      .map(i => `${absoluteBasedir}/${i}`)
+  })
 
   return { absoluteBasedir, files, basedir }
 }
