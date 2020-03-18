@@ -5,8 +5,8 @@ test(`creates static site from markdown files`, async t => {
   const { stdout } = await execa.command('./bin.js test-site')
   const lines = stdout.split('\n')
 
-  t.is(lines[0], '1 files found')
-  t.is(lines[1], 'processing files..')
-  t.true(lines[2].startsWith('created '))
-  t.true(lines[2].endsWith('/test-site/_site/index.html'))
+  t.is(lines[0], 'scanning test-site')
+  t.is(lines[1], '1 files found')
+  t.is(lines[2], 'processing files..')
+  t.is(lines[3], `index.md -> _site/index.html`)
 })

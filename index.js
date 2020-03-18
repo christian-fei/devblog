@@ -15,7 +15,7 @@ async function scan (basedir = process.cwd()) {
   const absoluteBasedir = path.resolve(basedir)
   const files = glob.sync(absoluteBasedir + '/**/*.md')
 
-  return { absoluteBasedir, files }
+  return { absoluteBasedir, files, basedir }
 }
 
 async function build (absoluteBasedir, files = []) {
@@ -31,7 +31,13 @@ async function build (absoluteBasedir, files = []) {
       if (filepath.endsWith('.md')) {
         const file = new MarkdownFile(filepath, absoluteBasedir)
         logger.debug('writing file', file)
-        results.push(file.write())
+        const destination = file.write()
+        results.push({
+          destination,
+          source: filepath,
+          relativeDestination: destination.replace(absoluteBasedir + '/', ''),
+          relativeSource: filepath.replace(absoluteBasedir + '/', '')
+        })
         continue
       }
       logger.debug(`unhandled ${filepath}`)

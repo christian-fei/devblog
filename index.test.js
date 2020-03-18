@@ -28,9 +28,9 @@ test('converts markdown files to html files', async t => {
 
   t.true(Array.isArray(results))
   t.is(results.length, 1)
-  const htmlFilePath = results[0]
-  t.true(htmlFilePath.endsWith('/_site/index.html'))
+  const { destination } = results[0]
+  t.true(destination.endsWith('/_site/index.html'))
 
-  const htmlContent = fs.readFileSync(htmlFilePath, { encoding: 'utf8' })
+  const htmlContent = fs.readFileSync(destination, { encoding: 'utf8' })
   t.snapshot(htmlContent)
 })
