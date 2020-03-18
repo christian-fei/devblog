@@ -35,7 +35,7 @@ async function createConfig (absoluteBasedir) {
   const fs = require('fs')
   const customConfigExists = fs.existsSync(absoluteBasedir + '/.devblog.js')
   if (!customConfigExists) return defaultConfig()
-  return require(absoluteBasedir + '/.devblog.js')()
+  return require(absoluteBasedir + '/.devblog.js')
 }
 
 function defaultConfig () {
