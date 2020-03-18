@@ -2,11 +2,15 @@
 
 const { scan, build } = require('.')
 
-main(process.argv[2] || process.cwd())
-  .then(() => process.exit(0))
-  .catch(err => console.error(err.message, err) && process.exit(1))
+if (require.main === module) {
+  run(process.argv[2] || process.cwd())
+    .then(() => process.exit(0))
+    .catch(err => console.error(err.message, err) && process.exit(1))
+} else {
+  module.exports = run
+}
 
-async function main (pathParam) {
+async function run (pathParam) {
   const { absoluteBasedir, files } = await scan(pathParam)
   console.log(`${files.length} files found`)
   console.log(`processing files..`)
