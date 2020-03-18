@@ -19,7 +19,7 @@ async function run (pathParam) {
   const { errors, results } = await build(absoluteBasedir, files)
   if (errors.length > 0) {
     console.error(`errors: `)
-    console.error(errors.map(e => `"${e.message}" on "${e.filepath}"`).join('\n'))
+    console.error(errors.map(e => `🚫 ${e.filepath}\n${e.message}`).join('\n'))
   }
   if (results.length === 0) {
     console.info('⚠️ no files created')

@@ -43,8 +43,7 @@ async function build (absoluteBasedir, files = []) {
       logger.debug(`unhandled ${filepath}`)
     } catch (err) {
       errors.push({ err, message: err.message, filepath })
-      logger.error(`failed writing file ${filepath}`, err.message)
-      console.error(err)
+      logger.trace(`failed writing file ${filepath}`, err.message, err)
     }
   }
 
