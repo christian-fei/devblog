@@ -11,14 +11,14 @@ async function main (pathParam) {
   console.log(`${files.length} files found`)
   console.log(`processing files..`)
 
-  const { errors, written } = await build(absoluteBasedir, files)
+  const { errors, results } = await build(absoluteBasedir, files)
   if (errors.length > 0) {
     console.error(`errors: `)
     console.error(errors.map(e => `"${e.message}" on "${e.filepath}"`).join('\n'))
   }
-  if (written.length === 0) {
+  if (results.length === 0) {
     console.info('⚠️ no files created')
   } else {
-    console.log(written.map(w => `created ${w}`).join('\n'))
+    console.log(results.map(w => `created ${w}`).join('\n'))
   }
 }
