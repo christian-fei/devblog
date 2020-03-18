@@ -1,8 +1,9 @@
 const { serial: test } = require('ava')
-const { scan, build } = require('.')
+const { scan, build } = require('..')
 const fs = require('fs')
+const path = require('path')
 
-const basedir = './test-site'
+const basedir = path.resolve(__dirname, './test-site')
 
 test('resolves absolute basedir', async t => {
   const { absoluteBasedir } = await scan(basedir)

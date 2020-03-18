@@ -1,5 +1,5 @@
 const { serial: test } = require('ava')
-const MarkdownFile = require('./markdown-file')
+const MarkdownFile = require('../lib/markdown-file')
 const path = require('path')
 
 test('reads file information', async t => {
