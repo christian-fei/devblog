@@ -4,6 +4,7 @@ const glob = require('glob')
 const logger = require('./lib/logger')
 
 const MarkdownFile = require('./lib/markdown-file')
+const GenericFile = require('./lib/generic-file')
 const mkdir = require('./lib/mkdir')
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
 async function scan (basedir = process.cwd()) {
   const absoluteBasedir = path.resolve(basedir)
   const files = glob.sync(absoluteBasedir + '/**/*', {
+    nodir: true,
     ignore: [
       'node_modules',
       'node_modules*',
@@ -22,11 +24,14 @@ async function scan (basedir = process.cwd()) {
       '.gitignore',
       '_includes',
       '_includes/*',
+      '*_includes/*',
       '_site',
-      '_site/*'
+      '_site/*',
+      '*_site/*'
     ]
       .map(i => `${absoluteBasedir}/${i}`)
   })
+    .filter(f => !f.includes('_site'))
 
   return { absoluteBasedir, files, basedir }
 }
@@ -53,7 +58,18 @@ async function build (absoluteBasedir, files = []) {
         })
         continue
       }
-      logger.debug(`unhandled ${filepath}`)
+
+      const file = new GenericFile(filepath, absoluteBasedir)
+      const destination = file.write()
+      results.push({
+        destination,
+        source: filepath,
+        relativeDestination: destination.replace(absoluteBasedir + '/', ''),
+        relativeSource: filepath.replace(absoluteBasedir + '/', '')
+      })
+      continue
+
+      console.error(`unhandled ${filepath}`)
     } catch (err) {
       errors.push({ err, message: err.message, filepath })
       logger.trace(`failed writing file ${filepath}`, err.message, err)
