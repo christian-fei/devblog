@@ -118,3 +118,4 @@ dist
 test-site/index.html
 test-site/_site/
 test/test-site/_site/
+test/fixtures/_site/
