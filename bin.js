@@ -18,7 +18,6 @@ async function run (pathParam) {
 
   const config = createConfig(absoluteWorkingDirectory)
   const { errors, results } = await build(absoluteWorkingDirectory, filepaths, config)
-
   print.buildResults(results)
   print.buildErrors(errors)
 }
