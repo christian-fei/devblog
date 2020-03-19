@@ -13,10 +13,17 @@ test('parses collections from file attributes', async t => {
 
   t.deepEqual(collections, {
     post: [{
-      tags: [
-        'post'
-      ],
-      title: 'test title'
+      url: '/test-with-front-matter.html',
+      title: 'test title',
+      date: undefined,
+      html: '<h1>test title</h1>\n<p>test content</p>\n',
+      md: '\n# test title\n\ntest content',
+      data: {
+        title: 'test title',
+        tags: [
+          'post'
+        ]
+      }
     }]
   })
 })
