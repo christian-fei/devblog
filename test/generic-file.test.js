@@ -1,5 +1,5 @@
 const { serial: test } = require('ava')
-const GenericFile = require('../lib/generic-file')
+const GenericFile = require('../lib/files/generic-file')
 const fs = require('fs')
 const path = require('path')
 

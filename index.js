@@ -3,8 +3,8 @@ const path = require('path')
 const glob = require('glob')
 const logger = require('./lib/logger')
 
-const MarkdownFile = require('./lib/markdown-file')
-const GenericFile = require('./lib/generic-file')
+const MarkdownFile = require('./lib/files/markdown-file')
+const GenericFile = require('./lib/files/generic-file')
 const mkdir = require('./lib/mkdir')
 
 module.exports = {
