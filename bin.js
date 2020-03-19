@@ -12,10 +12,10 @@ if (require.main === module) {
 }
 
 async function run (workingDirectory) {
-  const { absoluteWorkingDirectory, filepaths, files, config } = await scan(workingDirectory)
-  print.scanResult({ absoluteWorkingDirectory, filepaths, workingDirectory })
+  const scanResult = await scan(workingDirectory)
+  print.scanResult(scanResult)
 
-  const { errors, results } = await build(absoluteWorkingDirectory, files, config)
+  const { errors, results } = await build(scanResult)
   print.buildResults(results)
   print.buildErrors(errors)
 }
