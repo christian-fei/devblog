@@ -11,9 +11,9 @@ if (require.main === module) {
   module.exports = run
 }
 
-async function run (pathParam) {
-  const { absoluteWorkingDirectory, filepaths, files, config } = await scan(pathParam)
-  print.scanResult({ absoluteWorkingDirectory, filepaths, pathParam })
+async function run (workingDirectory) {
+  const { absoluteWorkingDirectory, filepaths, files, config } = await scan(workingDirectory)
+  print.scanResult({ absoluteWorkingDirectory, filepaths, workingDirectory })
 
   const { errors, results } = await build(absoluteWorkingDirectory, files, config)
   print.buildResults(results)
