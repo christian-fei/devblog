@@ -27,7 +27,7 @@ async function run (pathParam) {
 
   if (errors.length > 0) {
     console.error(`errors: `)
-    console.error(errors.map(e => `🚫 ${e.filepath}\n${e.message}`).join('\n'))
+    console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
   }
 }
 

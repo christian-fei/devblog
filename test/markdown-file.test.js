@@ -3,9 +3,9 @@ const MarkdownFile = require('../lib/markdown-file')
 const path = require('path')
 
 test('reads file information', async t => {
-  const filepath = path.resolve(__dirname, 'fixtures', 'test.md')
+  const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteBasedir = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(filepath, absoluteBasedir)
+  const file = new MarkdownFile(sourceFilePath, absoluteBasedir)
   t.truthy(file)
   const result = await file.read()
   t.deepEqual(result.attributes, {})
@@ -14,10 +14,10 @@ test('reads file information', async t => {
 })
 
 test('write output file', async t => {
-  const filepath = path.resolve(__dirname, 'fixtures', 'test.md')
+  const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteBasedir = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(filepath, absoluteBasedir)
+  const file = new MarkdownFile(sourceFilePath, absoluteBasedir)
 
   const result = await file.write()
-  t.truthy(result.includes('/test/fixtures/_site/test.html'), result)
+  t.truthy(result.destinationFilePath.includes('/test/fixtures/_site/test.html'), result.destinationFilePath)
 })

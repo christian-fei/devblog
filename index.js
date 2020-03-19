@@ -45,33 +45,22 @@ async function build (absoluteBasedir, files = [], config = {}) {
 
   mkdir(_sitePath)
 
-  for (const filepath of files) {
+  for (const sourceFilePath of files) {
     try {
-      if (filepath.endsWith('.md')) {
-        const file = new MarkdownFile(filepath, absoluteBasedir, config)
-        logger.debug('writing file', file)
-        const destination = await file.write()
-        results.push({
-          destination,
-          source: filepath,
-          relativeDestination: destination.replace(absoluteBasedir + '/', ''),
-          relativeSource: filepath.replace(absoluteBasedir + '/', '')
-        })
+      if (sourceFilePath.endsWith('.md')) {
+        const file = new MarkdownFile(sourceFilePath, absoluteBasedir, config)
+        logger.debug('writing markdown file', file)
+        results.push(await file.write())
         continue
       }
 
-      const file = new GenericFile(filepath, absoluteBasedir)
-      const destination = file.write()
-      results.push({
-        destination,
-        source: filepath,
-        relativeDestination: destination.replace(absoluteBasedir + '/', ''),
-        relativeSource: filepath.replace(absoluteBasedir + '/', '')
-      })
+      const file = new GenericFile(sourceFilePath, absoluteBasedir)
+      logger.debug('writing generic file', file)
+      results.push(await file.write())
       continue
     } catch (err) {
-      errors.push({ err, message: err.message, filepath })
-      logger.trace(`failed writing file ${filepath}`, err.message, err)
+      errors.push({ err, message: err.message, sourceFilePath })
+      logger.trace(`failed writing file ${sourceFilePath}`, err.message, err)
     }
   }
 
