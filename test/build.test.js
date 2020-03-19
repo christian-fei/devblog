@@ -1,5 +1,6 @@
 const { serial: test } = require('ava')
-const { scan, build } = require('..')
+const scan = require('../lib/scan')
+const build = require('../lib/build')
 const fs = require('fs')
 const path = require('path')
 

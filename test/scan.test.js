@@ -1,5 +1,5 @@
 const { serial: test } = require('ava')
-const { scan } = require('..')
+const scan = require('../lib/scan')
 const path = require('path')
 
 const workingDirectory = path.resolve(__dirname, './test-site')
