@@ -12,9 +12,9 @@ module.exports = {
   build
 }
 
-async function scan (basedir = process.cwd()) {
-  const absoluteBasedir = path.resolve(basedir)
-  const filepaths = glob.sync(absoluteBasedir + '/**/*', {
+async function scan (workingDirectory = process.cwd()) {
+  const absoluteWorkingDirectory = path.resolve(workingDirectory)
+  const filepaths = glob.sync(absoluteWorkingDirectory + '/**/*', {
     nodir: true,
     ignore: [
       'node_modules',
@@ -29,32 +29,32 @@ async function scan (basedir = process.cwd()) {
       '_site/*',
       '*_site/*'
     ]
-      .map(i => `${absoluteBasedir}/${i}`)
+      .map(i => `${absoluteWorkingDirectory}/${i}`)
   })
     .filter(f => !f.includes('_site'))
     .filter(f => !f.includes('node_modules'))
 
-  return { absoluteBasedir, filepaths, basedir }
+  return { absoluteWorkingDirectory, filepaths, workingDirectory }
 }
 
-async function build (absoluteBasedir, filepaths = [], config = {}) {
+async function build (absoluteWorkingDirectory, filepaths = [], config = {}) {
   const errors = []
   const results = []
 
-  const _sitePath = absoluteBasedir + '/_site'
+  const _sitePath = absoluteWorkingDirectory + '/_site'
 
   mkdir(_sitePath)
 
   for (const sourceFilePath of filepaths) {
     try {
       if (sourceFilePath.endsWith('.md')) {
-        const file = new MarkdownFile(sourceFilePath, absoluteBasedir, config)
+        const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory, config)
         logger.debug('writing markdown file', file)
         results.push(await file.write())
         continue
       }
 
-      const file = new GenericFile(sourceFilePath, absoluteBasedir)
+      const file = new GenericFile(sourceFilePath, absoluteWorkingDirectory)
       logger.debug('writing generic file', file)
       results.push(await file.write())
       continue
