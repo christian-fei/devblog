@@ -6,26 +6,25 @@ test('reads file information', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
-  await file.read()
-
   t.truthy(file)
-  t.deepEqual(file.attributes, {})
-  t.snapshot(file.html)
-  t.snapshot(file.md)
+  const result = await file.read()
+  t.deepEqual(result.attributes, {})
+  t.snapshot(result.html)
+  t.snapshot(result.md)
 })
 
 test('reads file information with front matter', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test-with-front-matter.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
-  await file.read()
   t.truthy(file)
-  t.deepEqual(file.attributes, {
+  const result = await file.read()
+  t.deepEqual(result.attributes, {
     tags: ['post'],
     title: 'test title'
   })
-  t.snapshot(file.html)
-  t.snapshot(file.md)
+  t.snapshot(result.html)
+  t.snapshot(result.md)
 })
 
 test('write output file', async t => {
