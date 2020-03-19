@@ -13,16 +13,16 @@ test('resolves absolute basedir', async t => {
 })
 
 test('finds files', async t => {
-  const { files } = await scan(basedir)
+  const { filepaths } = await scan(basedir)
 
-  t.true(Array.isArray(files))
-  t.is(files.length, 1)
-  t.true(files[0].endsWith('/index.md'))
+  t.true(Array.isArray(filepaths))
+  t.is(filepaths.length, 1)
+  t.true(filepaths[0].endsWith('/index.md'))
 })
 
 test('converts markdown files to html files', async t => {
-  const { absoluteBasedir, files } = await scan(basedir)
-  const { errors, results } = await build(absoluteBasedir, files)
+  const { absoluteBasedir, filepaths } = await scan(basedir)
+  const { errors, results } = await build(absoluteBasedir, filepaths)
 
   t.true(Array.isArray(errors))
   t.is(errors.length, 0)

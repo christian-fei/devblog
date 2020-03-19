@@ -14,7 +14,7 @@ module.exports = {
 
 async function scan (basedir = process.cwd()) {
   const absoluteBasedir = path.resolve(basedir)
-  const files = glob.sync(absoluteBasedir + '/**/*', {
+  const filepaths = glob.sync(absoluteBasedir + '/**/*', {
     nodir: true,
     ignore: [
       'node_modules',
@@ -34,10 +34,10 @@ async function scan (basedir = process.cwd()) {
     .filter(f => !f.includes('_site'))
     .filter(f => !f.includes('node_modules'))
 
-  return { absoluteBasedir, files, basedir }
+  return { absoluteBasedir, filepaths, basedir }
 }
 
-async function build (absoluteBasedir, files = [], config = {}) {
+async function build (absoluteBasedir, filepaths = [], config = {}) {
   const errors = []
   const results = []
 
@@ -45,7 +45,7 @@ async function build (absoluteBasedir, files = [], config = {}) {
 
   mkdir(_sitePath)
 
-  for (const sourceFilePath of files) {
+  for (const sourceFilePath of filepaths) {
     try {
       if (sourceFilePath.endsWith('.md')) {
         const file = new MarkdownFile(sourceFilePath, absoluteBasedir, config)

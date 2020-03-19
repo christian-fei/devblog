@@ -12,14 +12,14 @@ if (require.main === module) {
 }
 
 async function run (pathParam) {
-  const { absoluteBasedir, files } = await scan(pathParam)
+  const { absoluteBasedir, filepaths } = await scan(pathParam)
   console.log(`scanning ${absoluteBasedir.substring(absoluteBasedir.indexOf(pathParam))}`)
-  console.log(`${files.length} files found`)
+  console.log(`${filepaths.length} files found`)
   console.log(`processing files..`)
 
   const config = createConfig(absoluteBasedir)
 
-  const { errors, results } = await build(absoluteBasedir, files, config)
+  const { errors, results } = await build(absoluteBasedir, filepaths, config)
   if (results.length === 0) {
     console.info('⚠️ no files created')
   } else {
