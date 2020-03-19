@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { scan, build } = require('.')
-const createConfig = require('./lib/create-config')
 const print = require('./lib/print')
 
 if (require.main === module) {
@@ -13,11 +12,10 @@ if (require.main === module) {
 }
 
 async function run (pathParam) {
-  const { absoluteWorkingDirectory, filepaths } = await scan(pathParam)
+  const { absoluteWorkingDirectory, filepaths, files, config } = await scan(pathParam)
   print.scanResult({ absoluteWorkingDirectory, filepaths, pathParam })
 
-  const config = createConfig(absoluteWorkingDirectory)
-  const { errors, results } = await build(absoluteWorkingDirectory, filepaths, config)
+  const { errors, results } = await build(absoluteWorkingDirectory, files, config)
   print.buildResults(results)
   print.buildErrors(errors)
 }

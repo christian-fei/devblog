@@ -6,6 +6,7 @@ const logger = require('./lib/logger')
 const MarkdownFile = require('./lib/files/markdown-file')
 const GenericFile = require('./lib/files/generic-file')
 const mkdir = require('./lib/mkdir')
+const createConfig = require('./lib/create-config')
 
 module.exports = {
   scan,
@@ -14,6 +15,8 @@ module.exports = {
 
 async function scan (workingDirectory = process.cwd()) {
   const absoluteWorkingDirectory = path.resolve(workingDirectory)
+  const config = createConfig(absoluteWorkingDirectory)
+
   const filepaths = glob.sync(absoluteWorkingDirectory + '/**/*', {
     nodir: true,
     ignore: [
@@ -34,10 +37,12 @@ async function scan (workingDirectory = process.cwd()) {
     .filter(f => !f.includes('_site'))
     .filter(f => !f.includes('node_modules'))
 
-  return { absoluteWorkingDirectory, filepaths, workingDirectory }
+  const files = filepaths.map(f => toFile(f, absoluteWorkingDirectory, config))
+
+  return { absoluteWorkingDirectory, filepaths, files, config, workingDirectory }
 }
 
-async function build (absoluteWorkingDirectory, filepaths = [], config = {}) {
+async function build (absoluteWorkingDirectory, files = [], config = {}) {
   const errors = []
   const results = []
 
@@ -45,22 +50,12 @@ async function build (absoluteWorkingDirectory, filepaths = [], config = {}) {
 
   mkdir(_sitePath)
 
-  for (const sourceFilePath of filepaths) {
+  for (const file of files) {
     try {
-      if (sourceFilePath.endsWith('.md')) {
-        const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory, config)
-        logger.debug('writing markdown file', file)
-        results.push(await file.write())
-        continue
-      }
-
-      const file = new GenericFile(sourceFilePath, absoluteWorkingDirectory)
-      logger.debug('writing generic file', file)
       results.push(await file.write())
-      continue
     } catch (err) {
-      errors.push({ err, message: err.message, sourceFilePath })
-      logger.trace(`failed writing file ${sourceFilePath}`, err.message, err)
+      errors.push({ err, message: err.message, sourceFilePath: file.sourceFilePath })
+      logger.trace(`failed writing file ${file.sourceFilePath}`, err.message, err)
     }
   }
 
@@ -68,4 +63,11 @@ async function build (absoluteWorkingDirectory, filepaths = [], config = {}) {
     errors,
     results
   }
+}
+
+function toFile (sourceFilePath, absoluteWorkingDirectory, config) {
+  if (sourceFilePath.endsWith('.md')) {
+    return new MarkdownFile(sourceFilePath, absoluteWorkingDirectory, config)
+  }
+  return new GenericFile(sourceFilePath, absoluteWorkingDirectory)
 }

@@ -21,8 +21,8 @@ test('finds files', async t => {
 })
 
 test('converts markdown files to html files', async t => {
-  const { absoluteWorkingDirectory, filepaths } = await scan(workingDirectory)
-  const { errors, results } = await build(absoluteWorkingDirectory, filepaths)
+  const { absoluteWorkingDirectory, files, config } = await scan(workingDirectory)
+  const { errors, results } = await build(absoluteWorkingDirectory, files, config)
 
   t.true(Array.isArray(errors))
   t.is(errors.length, 0)
