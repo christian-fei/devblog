@@ -15,6 +15,7 @@ test('finds files', async t => {
   const { filepaths } = await scan(workingDirectory)
 
   t.true(Array.isArray(filepaths))
-  t.is(filepaths.length, 1)
+  t.is(filepaths.length, 2)
   t.true(filepaths[0].endsWith('/index.md'))
+  t.true(filepaths[1].endsWith('/test-post.md'))
 })

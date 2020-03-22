@@ -1,0 +1,9 @@
+{% extends 'layout.njk' %}
+
+{% block content %}
+  <header>post with layout template header</header>
+
+  <article>
+    {{ content | safe }}
+  </article>
+{% endblock %}

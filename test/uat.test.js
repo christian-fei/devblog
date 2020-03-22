@@ -6,7 +6,9 @@ test(`creates static site from markdown files`, async t => {
   const lines = stdout.split('\n')
 
   t.is(lines[0], 'scanning test/test-site')
-  t.is(lines[1], '1 files found')
+  t.is(lines[1], '2 files found')
   t.is(lines[2], 'processing files..')
   t.is(lines[3], `index.md -> _site/index.html`)
+  t.is(lines[4], `test-post.md -> _site/test-post.html`)
+  t.is(lines[5], undefined)
 })

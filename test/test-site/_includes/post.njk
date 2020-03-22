@@ -1,5 +1,5 @@
 <header>post template header</header>
 
 <article>
-  {% block content %}{% endblock %}
+  {{ content | safe }}
 </article>

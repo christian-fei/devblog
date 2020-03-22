@@ -14,10 +14,16 @@ test('converts markdown files to html files', async t => {
   t.is(errors.length, 0)
 
   t.true(Array.isArray(results))
-  t.is(results.length, 1)
-  const { destinationFilePath } = results[0]
-  t.true(destinationFilePath.endsWith('/_site/index.html'))
+  t.is(results.length, 2)
 
-  const htmlContent = fs.readFileSync(destinationFilePath, { encoding: 'utf8' })
-  t.snapshot(htmlContent)
+  const { destinationFilePath: d0 } = results[0]
+  const { destinationFilePath: d1 } = results[1]
+
+  t.true(d0.endsWith('/_site/index.html'), d0)
+  t.true(d1.endsWith('/_site/test-post.html'), d1)
+
+  const htmlContent0 = fs.readFileSync(d0, { encoding: 'utf8' })
+  t.snapshot(htmlContent0)
+  const htmlContent1 = fs.readFileSync(d1, { encoding: 'utf8' })
+  t.snapshot(htmlContent1)
 })
