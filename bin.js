@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const { scan, build } = require('.')
+const path = require('path')
 const print = require('./lib/print')
+const createConfig = require('./lib/create-config')
 const version = require('./package.json').version
 
 if (require.main === module) {
@@ -13,8 +15,11 @@ if (require.main === module) {
 }
 
 async function run (workingDirectory) {
+  const absoluteWorkingDirectory = path.resolve(workingDirectory)
+  const config = createConfig(absoluteWorkingDirectory)
+
   print.version(version)
-  const scanResult = await scan(workingDirectory)
+  const scanResult = await scan(workingDirectory, config)
   print.scanResult(scanResult)
 
   const { errors, results } = await build(scanResult)
