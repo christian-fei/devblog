@@ -29,11 +29,23 @@ test('reads file information with front matter', async t => {
   t.snapshot(result.md)
 })
 
-test('write output file', async t => {
+test('writes md output file', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
 
   const result = await file.write()
   t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test.html'), result.destinationFilePath)
+})
+
+test('writes njk output file', async t => {
+  const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test-nunjucks.njk')
+  const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
+  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+
+  const result = await file.write()
+  t.snapshot(result.attributes)
+  t.snapshot(result.md)
+  t.snapshot(result.html)
+  t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test-nunjucks.html'), result.destinationFilePath)
 })
