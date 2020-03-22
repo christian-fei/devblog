@@ -7,7 +7,7 @@ test('reads file information', async t => {
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
   t.truthy(file)
-  t.deepEqual(file.url, '/test.html')
+  t.deepEqual(file.url, '/test/')
   const result = await file.read()
   t.deepEqual(result.attributes, {})
   t.snapshot(result.html)
@@ -19,7 +19,7 @@ test('reads file information with front matter', async t => {
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
   t.truthy(file)
-  t.deepEqual(file.url, '/test-with-front-matter.html')
+  t.deepEqual(file.url, '/test-with-front-matter/')
   const result = await file.read()
   t.deepEqual(result.attributes, {
     tags: ['post'],
@@ -35,5 +35,5 @@ test('write output file', async t => {
   const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
 
   const result = await file.write()
-  t.truthy(result.destinationFilePath.includes('/test/fixtures/_site/test.html'), result.destinationFilePath)
+  t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test.html'), result.destinationFilePath)
 })
