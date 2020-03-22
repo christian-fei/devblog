@@ -2,6 +2,7 @@
 
 const { scan, build } = require('.')
 const print = require('./lib/print')
+const version = require('./package.json').version
 
 if (require.main === module) {
   run(process.argv[2] || process.cwd())
@@ -12,6 +13,7 @@ if (require.main === module) {
 }
 
 async function run (workingDirectory) {
+  print.version(version)
   const scanResult = await scan(workingDirectory)
   print.scanResult(scanResult)
 
