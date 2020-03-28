@@ -4,13 +4,8 @@ const fs = require('fs')
 const path = require('path')
 const version = require('../package.json').version
 
-test.before(async () => {
-  try {
-    fs.rmdirSync(path.resolve(__dirname, 'test-site', '_site'), { recursive: true })
-  } catch (err) {
-    console.error(err)
-  }
-})
+test.beforeEach(cleanup)
+test.after(cleanup)
 
 test(`creates static site from markdown files`, async t => {
   const { stdout } = await execa.command('./bin.js test/test-site')
@@ -27,4 +22,23 @@ test(`creates static site from markdown files`, async t => {
   t.is(lines[8], `test-with-collections.md `)
   t.is(lines[9], ` -> _site/test-with-collections.html`)
   t.is(lines[10], undefined)
+
+  t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site')))
+  t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site', 'index.html')))
+  t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site', 'test-post.html')))
+  t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site', 'test-with-collections.html')))
+
+  t.snapshot(fs.readFileSync(path.resolve(__dirname, 'test-site', '_site', 'index.html'), { encoding: 'utf8' }))
+  t.snapshot(fs.readFileSync(path.resolve(__dirname, 'test-site', '_site', 'test-post.html'), { encoding: 'utf8' }))
+  t.snapshot(fs.readFileSync(path.resolve(__dirname, 'test-site', '_site', 'test-with-collections.html'), { encoding: 'utf8' }))
 })
+
+function cleanup () {
+  try {
+    fs.rmdirSync(path.resolve(__dirname, 'test-site', '_site'), { recursive: true })
+  } catch (err) {}
+
+  try {
+    fs.rmdirSync(path.resolve(__dirname, 'generated-site'), { recursive: true })
+  } catch (err) {}
+}
