@@ -8,4 +8,4 @@ run in a directory with `*.md` files, and a `_site` will be generated containing
 
 you can use nunjucks templates, as you can see in [test-site](https://github.com/christian-fei/devblog/tree/master/test/test-site)
 
-[![asciicast](https://asciinema.org/a/q7t9YbYZrhRPSUJPapbyUDF7k.svg)](https://asciinema.org/a/q7t9YbYZrhRPSUJPapbyUDF7k)
+[![asciicast](https://asciinema.org/a/aUEeBmo0ev9TOZHsStiNyojvs.svg)](https://asciinema.org/a/aUEeBmo0ev9TOZHsStiNyojvs)
