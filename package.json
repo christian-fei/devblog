@@ -1,6 +1,6 @@
 {
   "name": "devblog",
-  "version": "2.9.8",
+  "version": "2.10.0",
   "description": "",
   "bin": "bin.js",
   "main": "index.js",
