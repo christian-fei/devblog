@@ -33,6 +33,25 @@ test(`creates static site from markdown files`, async t => {
   t.snapshot(fs.readFileSync(path.resolve(__dirname, 'test-site', '_site', 'test-with-collections.html'), { encoding: 'utf8' }))
 })
 
+test.only(`a user can create a blog from scratch with "devblog init"`, async t => {
+  const generatedSitePath = path.resolve(__dirname, 'generated-site')
+  const { stdout } = await execa.command(`./bin.js init ${generatedSitePath}`)
+  const lines = stdout.split('\n')
+
+  t.truthy(lines)
+  t.is(lines[0], `devblog version ${version}`)
+  t.is(lines[1], `initializing site at ${path.resolve(__dirname)}/generated-site`)
+  t.is(lines[2], `created ${path.resolve(__dirname)}/generated-site/index.md`)
+  t.is(lines[3], `created ${path.resolve(__dirname)}/generated-site/_includes/layout.njk`)
+  t.is(lines[4], undefined)
+
+  t.true(fs.existsSync(path.resolve(generatedSitePath)))
+  t.true(fs.existsSync(path.resolve(generatedSitePath, 'index.md')))
+  t.true(fs.existsSync(path.resolve(generatedSitePath, '_includes', 'layout.njk')))
+  t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, 'index.md'), { encoding: 'utf8' }))
+  t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, '_includes', 'layout.njk'), { encoding: 'utf8' }))
+})
+
 function cleanup () {
   try {
     fs.rmdirSync(path.resolve(__dirname, 'test-site', '_site'), { recursive: true })
