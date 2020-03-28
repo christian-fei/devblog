@@ -2,7 +2,6 @@
 
 const { scan, build, init } = require('.')
 const path = require('path')
-const print = require('./lib/print')
 const createConfig = require('./lib/create-config')
 const version = require('./package.json').version
 
@@ -23,7 +22,7 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
   const absoluteWorkingDirectory = path.resolve(workingDirectory)
   const config = createConfig(absoluteWorkingDirectory)
 
-  print.version(version)
+  console.log(`devblog version ${version}`)
 
   if (command === 'init') {
     await init(absoluteWorkingDirectory)
@@ -36,7 +35,13 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
     console.log(`processing files..`)
 
     const { errors, results } = await build(scanResult)
-    print.buildResults(results)
-    print.buildErrors(errors)
+    if (results.length === 0) {
+      console.info('⚠️ no files created')
+    }
+
+    if (errors.length > 0) {
+      console.error(`errors: `)
+      console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
+    }
   }
 }
