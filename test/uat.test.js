@@ -46,7 +46,12 @@ test(`a user can create a blog from scratch with "devblog init"`, async t => {
   t.is(lines[2], `created ${path.resolve(__dirname)}/generated-site/index.md`)
   t.is(lines[3], `created ${path.resolve(__dirname)}/generated-site/.devblog.js`)
   t.is(lines[4], `created ${path.resolve(__dirname)}/generated-site/_includes/layout.njk`)
-  t.is(lines[5], undefined)
+  t.is(lines[5], `scanning ${path.resolve(__dirname)}/generated-site`)
+  t.is(lines[6], `1 files found`)
+  t.is(lines[7], `processing files..`)
+  t.is(lines[8], `index.md `)
+  t.is(lines[9], ` -> _site/index.html`)
+  t.is(lines[10], undefined)
 
   t.true(fs.existsSync(path.resolve(generatedSitePath)))
   t.true(fs.existsSync(path.resolve(generatedSitePath, 'index.md')))
@@ -55,6 +60,9 @@ test(`a user can create a blog from scratch with "devblog init"`, async t => {
   t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, 'index.md'), { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, '_includes', 'layout.njk'), { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, '.devblog.js'), { encoding: 'utf8' }))
+
+  t.true(fs.existsSync(path.resolve(generatedSitePath, '_site', 'index.html')))
+  t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, '_site', 'index.html'), { encoding: 'utf8' }))
 })
 
 function cleanup () {

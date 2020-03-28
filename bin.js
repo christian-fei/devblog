@@ -28,20 +28,18 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
     await init(absoluteWorkingDirectory)
   }
 
-  if (command === 'build') {
-    console.log(`scanning ${absoluteWorkingDirectory.substring(absoluteWorkingDirectory.indexOf(workingDirectory))}`)
-    const scanResult = await scan(workingDirectory, config)
-    console.log(`${scanResult.filepaths.length} files found`)
-    console.log(`processing files..`)
+  console.log(`scanning ${absoluteWorkingDirectory.substring(absoluteWorkingDirectory.indexOf(workingDirectory))}`)
+  const scanResult = await scan(workingDirectory, config)
+  console.log(`${scanResult.filepaths.length} files found`)
+  console.log(`processing files..`)
 
-    const { errors, results } = await build(scanResult)
-    if (results.length === 0) {
-      console.info('⚠️ no files created')
-    }
+  const { errors, results } = await build(scanResult)
+  if (results.length === 0) {
+    console.info('⚠️ no files created')
+  }
 
-    if (errors.length > 0) {
-      console.error(`errors: `)
-      console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
-    }
+  if (errors.length > 0) {
+    console.error(`errors: `)
+    console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
   }
 }
