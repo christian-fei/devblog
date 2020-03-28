@@ -30,8 +30,10 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
   }
 
   if (command === 'build') {
+    console.log(`scanning ${absoluteWorkingDirectory.substring(absoluteWorkingDirectory.indexOf(workingDirectory))}`)
     const scanResult = await scan(workingDirectory, config)
-    print.scanResult(scanResult)
+    console.log(`${scanResult.filepaths.length} files found`)
+    console.log(`processing files..`)
 
     const { errors, results } = await build(scanResult)
     print.buildResults(results)
