@@ -7,3 +7,5 @@ npm i -g devblog
 run in a directory with `*.md` files, and a `_site` will be generated containing html files.
 
 you can use nunjucks templates, as you can see in [test-site](https://github.com/christian-fei/devblog/tree/master/test-site)
+
+[![asciicast](https://asciinema.org/a/q7t9YbYZrhRPSUJPapbyUDF7k.svg)](https://asciinema.org/a/q7t9YbYZrhRPSUJPapbyUDF7k)
