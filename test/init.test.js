@@ -18,8 +18,10 @@ test('initializes site', async t => {
   t.true(fs.existsSync(path.resolve(absoluteWorkingDirectory)))
   t.true(fs.existsSync(path.resolve(absoluteWorkingDirectory, 'index.md')))
   t.true(fs.existsSync(path.resolve(absoluteWorkingDirectory, '_includes', 'layout.njk')))
+  t.true(fs.existsSync(path.resolve(absoluteWorkingDirectory, '.devblog.js')))
   t.snapshot(fs.readFileSync(path.resolve(absoluteWorkingDirectory, 'index.md'), { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(path.resolve(absoluteWorkingDirectory, '_includes', 'layout.njk'), { encoding: 'utf8' }))
+  t.snapshot(fs.readFileSync(path.resolve(absoluteWorkingDirectory, '.devblog.js'), { encoding: 'utf8' }))
 })
 
 function cleanup () {

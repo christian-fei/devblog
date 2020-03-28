@@ -44,14 +44,17 @@ test(`a user can create a blog from scratch with "devblog init"`, async t => {
   t.is(lines[0], `devblog version ${version}`)
   t.is(lines[1], `initializing site at ${path.resolve(__dirname)}/generated-site`)
   t.is(lines[2], `created ${path.resolve(__dirname)}/generated-site/index.md`)
-  t.is(lines[3], `created ${path.resolve(__dirname)}/generated-site/_includes/layout.njk`)
-  t.is(lines[4], undefined)
+  t.is(lines[3], `created ${path.resolve(__dirname)}/generated-site/.devblog.js`)
+  t.is(lines[4], `created ${path.resolve(__dirname)}/generated-site/_includes/layout.njk`)
+  t.is(lines[5], undefined)
 
   t.true(fs.existsSync(path.resolve(generatedSitePath)))
   t.true(fs.existsSync(path.resolve(generatedSitePath, 'index.md')))
   t.true(fs.existsSync(path.resolve(generatedSitePath, '_includes', 'layout.njk')))
+  t.true(fs.existsSync(path.resolve(generatedSitePath, '.devblog.js')))
   t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, 'index.md'), { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, '_includes', 'layout.njk'), { encoding: 'utf8' }))
+  t.snapshot(fs.readFileSync(path.resolve(generatedSitePath, '.devblog.js'), { encoding: 'utf8' }))
 })
 
 function cleanup () {
