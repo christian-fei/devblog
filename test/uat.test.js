@@ -18,10 +18,12 @@ test(`creates static site from markdown files`, async t => {
   t.is(lines[4], `index.md `)
   t.is(lines[5], ` -> _site/index.html`)
   t.is(lines[6], `test-post.md `)
-  t.is(lines[7], ` -> _site/test-post.html`)
-  t.is(lines[8], `test-with-collections.md `)
-  t.is(lines[9], ` -> _site/test-with-collections.html`)
-  t.is(lines[10], undefined)
+  t.is(lines[7], ` -> _site/test-post/index.html `)
+  t.is(lines[8], `    _site/test-post.html`)
+  t.is(lines[9], `test-with-collections.md `)
+  t.is(lines[10], ` -> _site/test-with-collections/index.html `)
+  t.is(lines[11], `    _site/test-with-collections.html`)
+  t.is(lines[12], undefined)
 
   t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site')))
   t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site', 'index.html')))
@@ -33,7 +35,7 @@ test(`creates static site from markdown files`, async t => {
   t.snapshot(fs.readFileSync(path.resolve(__dirname, 'test-site', '_site', 'test-with-collections.html'), { encoding: 'utf8' }))
 })
 
-test.only(`a user can create a blog from scratch with "devblog init"`, async t => {
+test(`a user can create a blog from scratch with "devblog init"`, async t => {
   const generatedSitePath = path.resolve(__dirname, 'generated-site')
   const { stdout } = await execa.command(`./bin.js init ${generatedSitePath}`)
   const lines = stdout.split('\n')

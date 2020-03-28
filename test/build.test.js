@@ -32,7 +32,6 @@ test('converts markdown files to html files', async t => {
   t.snapshot(fs.readFileSync(dest1, { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(dest2, { encoding: 'utf8' }))
 
-  t.deepEqual(fs.readFileSync(dest0, { encoding: 'utf8' }), fs.readFileSync(dest0.replace(/\.html$/, '/index.html'), { encoding: 'utf8' }))
   t.deepEqual(fs.readFileSync(dest1, { encoding: 'utf8' }), fs.readFileSync(dest1.replace(/\.html$/, '/index.html'), { encoding: 'utf8' }))
   t.deepEqual(fs.readFileSync(dest2, { encoding: 'utf8' }), fs.readFileSync(dest2.replace(/\.html$/, '/index.html'), { encoding: 'utf8' }))
 })
