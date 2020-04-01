@@ -9,7 +9,7 @@ test.after(cleanup)
 test('write output file', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'image.png')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new GenericFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new GenericFile({ sourceFilePath, absoluteWorkingDirectory })
 
   const result = await file.write()
   t.truthy(result.destinationFilePath.includes('/test/fixtures/_site/image.png'), result.destinationFilePath)
@@ -19,7 +19,7 @@ test('write output file', async t => {
 test('skips writes if unchanged', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'image.png')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new GenericFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new GenericFile({ sourceFilePath, absoluteWorkingDirectory })
 
   let result = await file.write()
   t.falsy(result.unchanged)

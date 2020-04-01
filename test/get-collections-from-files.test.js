@@ -6,7 +6,7 @@ const getCollectionsFromFiles = require('../lib/get-collections-from-files')
 test('parses collections from file attributes', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test-with-front-matter.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
   await file.read()
 
   const collections = getCollectionsFromFiles([file])

@@ -9,7 +9,7 @@ test.after(cleanup)
 test('reads file information', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
   t.truthy(file)
   t.deepEqual(file.url, '/test/')
   const result = await file.read()
@@ -21,7 +21,7 @@ test('reads file information', async t => {
 test('reads file information with front matter', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test-with-front-matter.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
   t.truthy(file)
   t.deepEqual(file.url, '/test-with-front-matter/')
   const result = await file.read()
@@ -36,7 +36,7 @@ test('reads file information with front matter', async t => {
 test('writes md output file', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
 
   const result = await file.write()
   t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test.html'), result.destinationFilePath)
@@ -45,7 +45,7 @@ test('writes md output file', async t => {
 test('skips writes if unchanged', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
 
   let result = await file.write()
   t.falsy(result.unchanged)
@@ -57,7 +57,7 @@ test('skips writes if unchanged', async t => {
 test('writes njk output file', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test-nunjucks.njk')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile(sourceFilePath, absoluteWorkingDirectory)
+  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
 
   const result = await file.write()
   t.snapshot(result.attributes)
