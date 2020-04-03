@@ -1,13 +1,31 @@
 {
   "name": "devblog",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "description": "",
   "bin": "bin.js",
   "main": "index.js",
   "scripts": {
     "test": "ava -v"
   },
-  "keywords": ["static","site","blog","jekyll","11ty","eleventy","hugo","ghost","developer","html","nunjucks","simple","generator","static site generator","personal blog","lightweight","easy"],
+  "keywords": [
+    "static",
+    "site",
+    "blog",
+    "jekyll",
+    "11ty",
+    "eleventy",
+    "hugo",
+    "ghost",
+    "developer",
+    "html",
+    "nunjucks",
+    "simple",
+    "generator",
+    "static site generator",
+    "personal blog",
+    "lightweight",
+    "easy"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
