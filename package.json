@@ -7,7 +7,7 @@
   "scripts": {
     "test": "ava -v"
   },
-  "keywords": [],
+  "keywords": ["static","site","blog","jekyll","11ty","eleventy","hugo","ghost","developer","html","nunjucks","simple","generator","static site generator","personal blog","lightweight","easy"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
