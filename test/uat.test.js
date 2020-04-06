@@ -1,6 +1,7 @@
 const { serial: test } = require('ava')
 const execa = require('execa')
 const fs = require('fs')
+const rimraf = require('rimraf')
 const path = require('path')
 const version = require('../package.json').version
 
@@ -67,10 +68,10 @@ test(`a user can create a blog from scratch with "devblog init"`, async t => {
 
 function cleanup () {
   try {
-    fs.rmdirSync(path.resolve(__dirname, 'test-site', '_site'), { recursive: true })
-  } catch (err) {}
+    rimraf.sync(path.resolve(__dirname, 'test-site', '_site'), { recursive: true })
+  } catch (err) { console.error(err) }
 
   try {
-    fs.rmdirSync(path.resolve(__dirname, 'generated-site'), { recursive: true })
-  } catch (err) {}
+    rimraf.sync(path.resolve(__dirname, 'generated-site'), { recursive: true })
+  } catch (err) { console.error(err) }
 }

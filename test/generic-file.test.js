@@ -1,10 +1,11 @@
 const { serial: test } = require('ava')
 const GenericFile = require('../lib/files/generic-file')
 const fs = require('fs')
+const rimraf = require('rimraf')
 const path = require('path')
 
 test.beforeEach(cleanup)
-test.after(cleanup)
+test.afterEach(cleanup)
 
 test('write output file', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'image.png')
@@ -30,6 +31,6 @@ test('skips writes if unchanged', async t => {
 
 function cleanup () {
   try {
-    fs.rmdirSync(path.resolve(__dirname, 'fixtures', '_site'), { recursive: true })
-  } catch (err) {}
+    rimraf.sync(path.resolve(__dirname, 'fixtures', '_site'))
+  } catch (err) { console.error(err) }
 }

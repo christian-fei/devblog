@@ -2,6 +2,7 @@ const { serial: test } = require('ava')
 const createConfig = require('../lib/create-config')
 const init = require('../lib/init')
 const fs = require('fs')
+const rimraf = require('rimraf')
 const path = require('path')
 
 test.beforeEach(cleanup)
@@ -11,6 +12,7 @@ const workingDirectory = path.resolve(__dirname, './generated-site')
 test('initializes site', async t => {
   const absoluteWorkingDirectory = path.resolve(workingDirectory)
   const config = createConfig(absoluteWorkingDirectory)
+  console.log({ config })
   t.snapshot(config)
 
   await init(absoluteWorkingDirectory)
@@ -26,6 +28,6 @@ test('initializes site', async t => {
 
 function cleanup () {
   try {
-    fs.rmdirSync(workingDirectory, { recursive: true })
-  } catch (err) {}
+    rimraf.sync(workingDirectory, { recursive: true })
+  } catch (err) { console.error(err) }
 }

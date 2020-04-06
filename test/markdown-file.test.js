@@ -1,6 +1,7 @@
 const { serial: test } = require('ava')
 const MarkdownFile = require('../lib/files/markdown-file')
 const fs = require('fs')
+const rimraf = require('rimraf')
 const path = require('path')
 
 test.beforeEach(cleanup)
@@ -68,6 +69,6 @@ test('writes njk output file', async t => {
 
 function cleanup () {
   try {
-    fs.rmdirSync(path.resolve(__dirname, 'fixtures', '_site'), { recursive: true })
-  } catch (err) {}
+    rimraf.sync(path.resolve(__dirname, 'fixtures', '_site'), { recursive: true })
+  } catch (err) { console.error(err) }
 }

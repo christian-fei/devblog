@@ -30,7 +30,8 @@
   "license": "ISC",
   "devDependencies": {
     "ava": "^3.5.2",
-    "execa": "^4.0.0"
+    "execa": "^4.0.0",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "front-matter": "^3.1.0",
