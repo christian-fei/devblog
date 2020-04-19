@@ -27,7 +27,7 @@
     "easy"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "GPL",
   "devDependencies": {
     "ava": "^3.5.2",
     "execa": "^4.0.0",
