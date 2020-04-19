@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { scan, build, init } = require('.')
+const { scan, build, init, save } = require('.')
 const path = require('path')
 const createConfig = require('./lib/create-config')
 const version = require('./package.json').version
@@ -30,6 +30,9 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
 
   console.log(`scanning ${absoluteWorkingDirectory.substring(absoluteWorkingDirectory.indexOf(workingDirectory))}`)
   const scanResult = await scan(workingDirectory, config)
+
+  await save(absoluteWorkingDirectory, scanResult)
+
   console.log(`${scanResult.filepaths.length} files found`)
   console.log(`processing files..`)
 

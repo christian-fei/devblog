@@ -120,3 +120,4 @@ test-site/_site/
 test/test-site/_site/
 test/fixtures/_site/
 package-lock.json
+test/test-site/site.json
