@@ -21,6 +21,7 @@ test('skips writes if unchanged', async t => {
   const sourceFilePath = path.resolve(__dirname, 'fixtures', 'image.png')
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new GenericFile({ sourceFilePath, absoluteWorkingDirectory })
+  await file.read()
 
   let result = await file.write()
   t.falsy(result.unchanged)
