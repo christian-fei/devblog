@@ -2,4 +2,4 @@
 
 - [x] scan returns files
 - [x] scan returns config
-- [ ] url property
+- [x] url property
