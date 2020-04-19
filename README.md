@@ -4,6 +4,8 @@ yet another static site generator
 npm i -g devblog
 ```
 
+[read more about it on cri.dev](https://cri.dev/posts/2020-04-19-devblog-yet-another-static-site-generator-seriously/)
+
 ## create a blog
 
 ```
