@@ -13,6 +13,10 @@ devblog init my-new-blog && cd my-new-blog # optional, creates a blog
 devblog # build blog
 ```
 
+or try to run it a 11ty or similar blog, it will give you hints on what filters and variables need to be configured in the file `.devblog.js` (see [`.devblog.example.js`](https://github.com/christian-fei/devblog/blob/master/test/test-site/.devblog.js)).
+
+You can also find an example in the [example test-site](https://github.com/christian-fei/devblog/tree/master/test/test-site).
+
 ## serve on localhost:8080
 
 ```
