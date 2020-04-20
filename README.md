@@ -1,5 +1,8 @@
 yet another static site generator
 
+![devblog build](https://github.com/christian-fei/devblog/workflows/devblog%20build/badge.svg) [![npm-dependencies](https://img.shields.io/badge/dependencies-none-blue.svg?style=flat-square&colorB=44CC11)](package.json) [![standard-js](https://img.shields.io/badge/coding%20style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/) [![npm-node-version](https://img.shields.io/badge/node-10%2B-blue.svg?style=flat-square)](https://nodejs.org/docs/v6.0.0/api) [![npm-version](https://img.shields.io/npm/v/devblog.svg?style=flat-square&colorB=007EC6)](https://www.npmjs.com/package/devblog) [![npm-license](https://img.shields.io/npm/l/devblog.svg?style=flat-square&colorB=007EC6)](https://spdx.org/licenses/MIT)
+
+
 ```
 npm i -g devblog
 ```
