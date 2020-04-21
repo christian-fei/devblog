@@ -17,6 +17,7 @@ test('reads file information', async t => {
   t.deepEqual(result.attributes, {})
   t.snapshot(result.html)
   t.snapshot(result.md)
+  t.snapshot(result.text)
 })
 
 test('reads file information with front matter', async t => {
@@ -32,6 +33,7 @@ test('reads file information with front matter', async t => {
   })
   t.snapshot(result.html)
   t.snapshot(result.md)
+  t.snapshot(result.text)
 })
 
 test('writes md output file', async t => {
@@ -63,6 +65,7 @@ test('writes njk output file', async t => {
   const result = await file.write()
   t.snapshot(result.attributes)
   t.snapshot(result.md)
+  t.snapshot(result.text)
   t.snapshot(result.html)
   t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test-nunjucks.html'), result.destinationFilePath)
 })
