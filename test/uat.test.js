@@ -42,7 +42,6 @@ test(`a user can create a blog from scratch with "devblog init"`, async t => {
   const { stdout } = await execa.command(`./bin.js init ${generatedSitePath}`)
   const lines = stdout.split('\n')
 
-  t.truthy(lines)
   t.is(lines[0], `devblog version ${version}`)
   t.is(lines[1], `initializing site at ${path.resolve(__dirname)}/generated-site`)
   t.is(lines[2], `created ${path.resolve(__dirname)}/generated-site/index.md`)
