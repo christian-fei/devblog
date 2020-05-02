@@ -7,6 +7,11 @@
   "scripts": {
     "test": "ava -v"
   },
+  "ava": {
+    "ignoredByWatcher": [
+      "test/test-site/**"
+    ]
+  },
   "keywords": [
     "static",
     "site",
