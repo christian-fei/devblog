@@ -1,6 +1,5 @@
 const { serial: test } = require('ava')
 const MarkdownFile = require('../lib/files/markdown-file')
-const fs = require('fs')
 const rimraf = require('rimraf')
 const path = require('path')
 
@@ -43,18 +42,6 @@ test('writes md output file', async t => {
 
   const result = await file.write()
   t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test.html'), result.destinationFilePath)
-})
-
-test('skips writes if unchanged', async t => {
-  const sourceFilePath = path.resolve(__dirname, 'fixtures', 'test.md')
-  const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
-  const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
-
-  let result = await file.write()
-  t.falsy(result.unchanged)
-
-  result = await file.write()
-  t.truthy(result.unchanged)
 })
 
 test('writes njk output file', async t => {
