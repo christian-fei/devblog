@@ -34,7 +34,7 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
   await save(absoluteWorkingDirectory, scanResult)
 
   console.log(`${scanResult.filepaths.length} files found`)
-  console.log(`processing files..`)
+  console.log('processing files..')
 
   const { errors, results } = await build(scanResult)
   if (results.length === 0) {
@@ -42,7 +42,7 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
   }
 
   if (errors.length > 0) {
-    console.error(`errors: `)
+    console.error('errors: ')
     console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
   }
 }
