@@ -31,8 +31,6 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
   console.log(`scanning ${absoluteWorkingDirectory.substring(absoluteWorkingDirectory.indexOf(workingDirectory))}`)
   const scanResult = await scan(workingDirectory, config)
 
-  await save(absoluteWorkingDirectory, scanResult)
-
   console.log(`${scanResult.filepaths.length} files found`)
   console.log('processing files..')
 
@@ -45,4 +43,7 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
     console.error('errors: ')
     console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
   }
+
+  await save(absoluteWorkingDirectory, scanResult)
+
 }
