@@ -6,19 +6,22 @@ const createConfig = require('./lib/create-config')
 const version = require('./package.json').version
 
 if (require.main === module) {
-  run(process.argv[2] || process.cwd(), process.argv[3] || process.cwd())
+  run(process.argv)
     .then(() => process.exit(0))
     .catch(err => console.error(err.message, err) && process.exit(1))
 } else {
   module.exports = run
 }
 
-async function run (workingDirectoryOrCommand, workingDirectory) {
+async function run (argv = process.argv) {
+  const workingDirectoryOrCommand = argv[2] || process.cwd()
+  let workingDirectory = argv[3] || process.cwd()
   let command = 'init'
   if (workingDirectoryOrCommand !== 'init') {
     workingDirectory = workingDirectoryOrCommand
     command = 'build'
   }
+  const toCache = argv.includes('--cache')
   const absoluteWorkingDirectory = path.resolve(workingDirectory)
   const config = createConfig(absoluteWorkingDirectory)
 
@@ -44,6 +47,5 @@ async function run (workingDirectoryOrCommand, workingDirectory) {
     console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
   }
 
-  await save(absoluteWorkingDirectory, scanResult)
-
+  toCache && await save(absoluteWorkingDirectory, scanResult)
 }

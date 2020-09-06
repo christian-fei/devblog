@@ -9,7 +9,7 @@ test.beforeEach(cleanup)
 test.after(cleanup)
 
 test('creates static site from markdown files', async t => {
-  const { stdout } = await execa.command('./bin.js test/test-site')
+  const { stdout } = await execa.command('./bin.js test/test-site --cache')
   const lines = stdout.split('\n')
 
   t.is(lines[0], `devblog version ${version}`)
@@ -39,7 +39,7 @@ test('creates static site from markdown files', async t => {
 
 test('a user can create a blog from scratch with "devblog init"', async t => {
   const generatedSitePath = path.resolve(__dirname, 'generated-site')
-  const { stdout } = await execa.command(`./bin.js init ${generatedSitePath}`)
+  const { stdout } = await execa.command(`./bin.js init ${generatedSitePath} --cache`)
   const lines = stdout.split('\n')
 
   t.is(lines[0], `devblog version ${version}`)
