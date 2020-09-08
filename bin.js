@@ -22,7 +22,6 @@ async function run (argv = process.argv) {
     command = 'build'
   }
   const toCache = argv.includes('--cache')
-  const toDebug = process.env.DEBUG === 'true'
   const absoluteWorkingDirectory = path.resolve(workingDirectory)
   const config = createConfig(absoluteWorkingDirectory)
 
@@ -33,16 +32,12 @@ async function run (argv = process.argv) {
   }
 
   console.log(`scanning ${absoluteWorkingDirectory.substring(absoluteWorkingDirectory.indexOf(workingDirectory))}`)
-  toDebug && console.time('scan')
   const scanResult = await scan(workingDirectory, config)
-  toDebug && console.timeEnd('scan')
 
   console.log(`${scanResult.filepaths.length} files found`)
   console.log('processing files..')
 
-  toDebug && console.time('build')
   const { errors, results } = await build(scanResult)
-  toDebug && console.timeEnd('build')
   if (results.length === 0) {
     console.info('⚠️ no files created')
   }
@@ -53,8 +48,6 @@ async function run (argv = process.argv) {
   }
 
   if (toCache) {
-    toDebug && console.time('save')
     await save(absoluteWorkingDirectory, scanResult)
-    toDebug && console.timeEnd('save')
   }
 }
