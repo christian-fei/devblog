@@ -12,11 +12,10 @@ test('reads file information', async t => {
   const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
   t.truthy(file)
   t.deepEqual(file.url, '/test/')
-  const result = await file.read()
-  t.deepEqual(result.attributes, {})
-  t.snapshot(result.html)
-  t.snapshot(result.md)
-  t.snapshot(result.text)
+  await file.read()
+  t.deepEqual(file.attributes, {})
+  t.snapshot(file.md)
+  t.snapshot(file.text)
 })
 
 test('reads file information with front matter', async t => {
@@ -25,14 +24,13 @@ test('reads file information with front matter', async t => {
   const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
   t.truthy(file)
   t.deepEqual(file.url, '/test-with-front-matter/')
-  const result = await file.read()
-  t.deepEqual(result.attributes, {
+  await file.read()
+  t.deepEqual(file.attributes, {
     tags: ['post'],
     title: 'test title'
   })
-  t.snapshot(result.html)
-  t.snapshot(result.md)
-  t.snapshot(result.text)
+  t.snapshot(file.md)
+  t.snapshot(file.text)
 })
 
 test('writes md output file', async t => {
@@ -40,8 +38,9 @@ test('writes md output file', async t => {
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
 
-  const result = await file.write()
-  t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test.html'), result.destinationFilePath)
+  await file.read()
+  await file.write()
+  t.truthy(file.destinationFilePath.endsWith('/test/fixtures/_site/test.html'), file.destinationFilePath)
 })
 
 test('writes njk output file', async t => {
@@ -49,12 +48,13 @@ test('writes njk output file', async t => {
   const absoluteWorkingDirectory = path.resolve(__dirname, 'fixtures')
   const file = new MarkdownFile({ sourceFilePath, absoluteWorkingDirectory })
 
-  const result = await file.write()
-  t.snapshot(result.attributes)
-  t.snapshot(result.md)
-  t.snapshot(result.text)
-  t.snapshot(result.html)
-  t.truthy(result.destinationFilePath.endsWith('/test/fixtures/_site/test-nunjucks.html'), result.destinationFilePath)
+  await file.read()
+  await file.write()
+  t.snapshot(file.attributes)
+  t.snapshot(file.md)
+  t.snapshot(file.text)
+  t.snapshot(file.html)
+  t.truthy(file.destinationFilePath.endsWith('/test/fixtures/_site/test-nunjucks.html'), file.destinationFilePath)
 })
 
 function cleanup () {
