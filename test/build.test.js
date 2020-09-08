@@ -20,18 +20,21 @@ test('converts markdown files to html files', async t => {
   t.is(errors.length, 0)
 
   t.true(Array.isArray(results))
-  t.is(results.length, 3)
+  t.is(results.length, 4)
 
-  const [{ destinationFilePath: dest0 }, { destinationFilePath: dest1 }, { destinationFilePath: dest2 }] = [results[0], results[1], results[2]]
+  const [{ destinationFilePath: dest0 }, { destinationFilePath: dest1 }, { destinationFilePath: dest2 }, { destinationFilePath: dest3 }] = [results[0], results[1], results[2], results[3]]
 
   t.true(dest0.endsWith('/_site/index.html'), dest0)
   t.true(dest1.endsWith('/_site/test-post.html'), dest1)
   t.true(dest2.endsWith('/_site/test-with-collections.html'), dest2)
+  t.true(dest3.endsWith('/_site/test-with-tags.html'), dest3)
 
   t.snapshot(fs.readFileSync(dest0, { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(dest1, { encoding: 'utf8' }))
   t.snapshot(fs.readFileSync(dest2, { encoding: 'utf8' }))
+  t.snapshot(fs.readFileSync(dest3, { encoding: 'utf8' }))
 
   t.deepEqual(fs.readFileSync(dest1, { encoding: 'utf8' }), fs.readFileSync(dest1.replace(/\.html$/, '/index.html'), { encoding: 'utf8' }))
   t.deepEqual(fs.readFileSync(dest2, { encoding: 'utf8' }), fs.readFileSync(dest2.replace(/\.html$/, '/index.html'), { encoding: 'utf8' }))
+  t.deepEqual(fs.readFileSync(dest3, { encoding: 'utf8' }), fs.readFileSync(dest3.replace(/\.html$/, '/index.html'), { encoding: 'utf8' }))
 })

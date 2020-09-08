@@ -14,7 +14,7 @@ test('creates static site from markdown files', async t => {
 
   t.is(lines[0], `devblog version ${version}`)
   t.is(lines[1], 'scanning test/test-site')
-  t.is(lines[2], '3 files found')
+  t.is(lines[2], '4 files found')
   t.is(lines[3], 'processing files..')
   t.is(lines[4], 'index.md ')
   t.is(lines[5], ' -> _site/index.html')
@@ -24,8 +24,11 @@ test('creates static site from markdown files', async t => {
   t.is(lines[9], 'test-with-collections.md ')
   t.is(lines[10], ' -> _site/test-with-collections/index.html ')
   t.is(lines[11], '    _site/test-with-collections.html')
-  t.is(lines[12], 'saved site.json')
-  t.is(lines[13], undefined)
+  t.is(lines[12], 'test-with-tags.md ')
+  t.is(lines[13], ' -> _site/test-with-tags/index.html ')
+  t.is(lines[14], '    _site/test-with-tags.html')
+  t.is(lines[15], 'saved site.json')
+  t.is(lines[16], undefined)
 
   t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site')))
   t.truthy(fs.existsSync(path.resolve(__dirname, 'test-site', '_site', 'index.html')))
