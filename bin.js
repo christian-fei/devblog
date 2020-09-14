@@ -21,7 +21,6 @@ async function run (argv = process.argv) {
     workingDirectory = workingDirectoryOrCommand
     command = 'build'
   }
-  const toCache = argv.includes('--cache')
   const absoluteWorkingDirectory = path.resolve(workingDirectory)
   const config = createConfig(absoluteWorkingDirectory)
 
@@ -47,7 +46,5 @@ async function run (argv = process.argv) {
     console.error(errors.map(e => `🚫 ${e.sourceFilePath}\n${e.message}`).join('\n'))
   }
 
-  if (toCache) {
-    await save(absoluteWorkingDirectory, scanResult)
-  }
+  await save(absoluteWorkingDirectory, scanResult)
 }
